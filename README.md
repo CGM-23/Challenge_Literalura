@@ -52,3 +52,5 @@ CREATE TABLE IF NOT EXISTS libros_autores (
   autor_id BIGINT  NOT NULL REFERENCES autores(id)  ON DELETE CASCADE,
   PRIMARY KEY (libro_id, autor_id)
 );
+```
+## 3) Ejecutar y uso
