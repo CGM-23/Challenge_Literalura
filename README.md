@@ -5,15 +5,25 @@ Aplicación de línea de comandos (CLI) en **Java / Spring Boot** que busca libr
 ---
 
 ## Índice
-
-1. [Requisitos](#1-requisitos)
-2. [Configuración](#2-configuración)
-3. [Ejecutar y uso](#3-ejecutar-y-uso)
-4. [Estructura y notas técnicas](#4-estructura-y-notas-técnicas)
+1. [Descripción del proyecto](#0-descripción-del-proyecto)  
+2. [Requisitos](#1-requisitos)
+3. [Configuración](#2-configuración)
+4. [Ejecutar y uso](#3-ejecutar-y-uso)
 
 ---
+## 1) Descripción del proyecto
 
-## 1) Requisitos
+Aplicación **CLI (consola)** en **Java / Spring Boot** que consulta la API pública **[Gutendex](https://gutendex.com/)** para buscar libros por título.  
+Guarda en **PostgreSQL** el libro encontrado (usando el **id de Gutendex**), sus **autores** (sin duplicados) y permite consultar desde la base:
+
+- Listar libros registrados  
+- Listar autores registrados  
+- Filtrar autores vivos en un año dado
+
+> Nota: La opción “libros por idioma” usa el registro **en memoria**; si se desea desde BD, basta persistir los idiomas (p. ej. tabla `book_languages` o `@ElementCollection`).
+
+
+## 2) Requisitos
 
 - Java **17+** (probado con JDK 21)
 - Maven **3.9+**
@@ -22,7 +32,7 @@ Aplicación de línea de comandos (CLI) en **Java / Spring Boot** que busca libr
 
 ---
 
-## 2) Configuración
+## 3) Configuración
 
 ### 2.1. Base de datos
 
@@ -53,4 +63,18 @@ CREATE TABLE IF NOT EXISTS libros_autores (
   PRIMARY KEY (libro_id, autor_id)
 );
 ```
-## 3) Ejecutar y uso
+## 4) Ejecutar y uso
+```bash
+mvn clean package
+mvn spring-boot:run
+```
+1: ingresa una parte del título (ej. quijote).
+Se consulta Gutendex, se toma el primer resultado y se guarda en BD (libro + autores, sin duplicados).
+
+2: lista los libros guardados en libros (con sus autores).
+
+3: lista los autores guardados en autores.
+
+4: pide un año y filtra autores vivos en ese año.
+
+5: lista por idioma de los resultados en memoria (si quieres que sea desde BD, añade persistencia de idiomas).
