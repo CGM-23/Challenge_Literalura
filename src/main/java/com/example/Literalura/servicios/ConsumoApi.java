@@ -9,7 +9,7 @@ import java.time.Duration;
 public class ConsumoApi {
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
-            .followRedirects(HttpClient.Redirect.NORMAL) // 👈 sigue 301/302/307/308 en GET
+            .followRedirects(HttpClient.Redirect.NORMAL) 
             .build();
 
     public String obtenerDatos(String url) {
