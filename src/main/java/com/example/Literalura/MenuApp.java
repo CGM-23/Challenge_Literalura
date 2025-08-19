@@ -26,7 +26,7 @@ public class MenuApp {
     private final LibroRepository libroRepo;
     private final AutorRepository autorRepo;
 
-    // (sigues teniendo tu registro en memoria)
+    
     private final Set<Libro> librosRegistrados = new LinkedHashSet<>();
     private final Set<Autor> autoresRegistrados = new LinkedHashSet<>();
 
@@ -53,7 +53,7 @@ public class MenuApp {
             opcion = teclado.nextInt(); teclado.nextLine();
 
             switch (opcion) {
-                case 1 -> buscarLibroWebYGuardar();   // <- nombre nuevo
+                case 1 -> buscarLibroWebYGuardar();   
                 case 2 -> listarLibrosRegistradosBD();
                 case 3 -> listarAutoresRegistradosBD();
                 case 4 -> listarAutoresVivosEnAnioBD();
@@ -64,8 +64,7 @@ public class MenuApp {
         }
     }
 
-    // (1) Buscar en Gutendex y GUARDAR en BD
-    @Transactional // IMPORTANTE: usar org.springframework.transaction.annotation.Transactional y método public
+    @Transactional 
     public void buscarLibroWebYGuardar() {
         System.out.print("Ingrese parte del título: ");
         String termino = teclado.nextLine().trim();
@@ -85,14 +84,14 @@ public class MenuApp {
         datosLibro dto = respuesta.results().get(0);
         Libro libro = Libro.from(dto);
 
-        // ---- Persistencia ----
+     
         Libro entidad = libroRepo.findById(libro.getId()).orElseGet(() -> {
             Libro l = new Libro();
             l.setId(libro.getId());
             return l;
         });
         entidad.setTitulo(libro.getTitulo());
-        entidad.setNumeroDeDescargas(libro.getNumeroDeDescargas()); // <- nombre correcto
+        entidad.setNumeroDeDescargas(libro.getNumeroDeDescargas()); 
 
         List<Autor> vinculados = new ArrayList<>();
         if (libro.getAutores() != null) {
@@ -105,15 +104,13 @@ public class MenuApp {
                 vinculados.add(existente);
             }
         }
-        entidad.setAutores(vinculados); // si tienes @ManyToMany en Libro, persiste el vínculo
+        entidad.setAutores(vinculados);
         libroRepo.save(entidad);
-        // ---- Fin persistencia ----
-
-        // También mantén tu registro en memoria (para opción 5)
+       
         librosRegistrados.add(libro);
         autoresRegistrados.addAll(libro.getAutores());
 
-        System.out.println("\n📚 Libro guardado:");
+        System.out.println("\n Libro guardado:");
         System.out.println("   ID: " + entidad.getId());
         System.out.println("   Título: " + entidad.getTitulo());
         System.out.println("   Autores: " + (vinculados.isEmpty()
@@ -127,7 +124,7 @@ public class MenuApp {
     private void listarLibrosRegistradosBD() {
         var libros = libroRepo.findAll();
         if (libros.isEmpty()) { System.out.println("No hay libros registrados en la BD."); return; }
-        System.out.println("\n📚 Libros en BD:");
+        System.out.println("\n Libros en BD:");
         int i = 1;
         for (Libro l : libros) {
             String autores = (l.getAutores() == null || l.getAutores().isEmpty())
@@ -154,7 +151,7 @@ public class MenuApp {
         System.out.println();
     }
 
-    // (4) Autores vivos (BD)
+    
     private void listarAutoresVivosEnAnioBD() {
         System.out.print("Ingrese un año (ej. 1605): ");
         Integer anio = leerEntero();
@@ -174,7 +171,7 @@ public class MenuApp {
         if (vivos.isEmpty()) {
             System.out.println("No se encontraron autores vivos en " + anio + " (en tu BD).");
         } else {
-            System.out.println("\n👤 Autores vivos en " + anio + ":");
+            System.out.println("\n Autores vivos en " + anio + ":");
             int i = 1;
             for (Autor a : vivos) {
                 System.out.printf(" %d) %s (nac: %s, fallec: %s)%n",
@@ -184,7 +181,7 @@ public class MenuApp {
         System.out.println();
     }
 
-    // (5) Libros por idioma (registro en memoria)
+    
     private void listarLibrosPorIdioma() {
         if (librosRegistrados.isEmpty()) {
             System.out.println("No hay libros registrados en memoria. Busca libros primero.");
@@ -211,7 +208,7 @@ public class MenuApp {
             return;
         }
 
-        System.out.println("\n📚 Libros en idioma '" + code + "':");
+        System.out.println("\n Libros en idioma '" + code + "':");
         int i = 1;
         for (Libro l : filtrados) {
             System.out.printf(" %d) %s — Idiomas: %s%n",
@@ -220,7 +217,7 @@ public class MenuApp {
         System.out.println();
     }
 
-    // helpers
+    
     private Integer leerEntero() {
         String txt = teclado.nextLine().trim();
         try { return Integer.parseInt(txt); }
