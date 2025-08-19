@@ -40,11 +40,11 @@ public class MenuApp {
         while (opcion != 0) {
             String menu = """
                     Elija la opción a través de su número:
-                      1.- Buscar libro por título (guarda en BD)
-                      2.- Lista libros registrados (desde BD)
-                      3.- Lista autores registrados (desde BD)
-                      4.- Lista autores vivos en un determinado año (desde BD)
-                      5.- Listar libros por idioma (registro en memoria)
+                      1.- Buscar libro por título 
+                      2.- Lista libros registrados 
+                      3.- Lista autores registrados 
+                      4.- Lista autores vivos en un determinado año 
+                      5.- Listar libros por idioma 
                       0 - Salir
                     """;
             System.out.println(menu);
